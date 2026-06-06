@@ -1,4 +1,4 @@
-# Car-Brand-Classification-Through-Video
+# Car Brand Classification Through Video
 A car brand classifier that utilizes the speed of **YOLOv8n** and the accuracy of **ResNet-50** to identify brands in different car traffic videos, built as part of a university course assignment.
 
 # Contents of this Project  
@@ -16,7 +16,7 @@ The code itself even though it is one file, it can be split in two parts. The fi
 <img width="600" height="337" alt="Detection-ezgif com-optimize" src="https://github.com/user-attachments/assets/13c54ce7-6fb1-4466-aa59-ab1402d94ba6" />
 
 # Results
-If you want to properly see the results of the program you can **[click here](https://drive.google.com/file/d/10hYeSIOSfufaInFkyWj55LAPNFDOUFWv/view?usp=drive_link)**
+If you want to properly see the results of the program **[you can click here](https://drive.google.com/file/d/10hYeSIOSfufaInFkyWj55LAPNFDOUFWv/view?usp=drive_link)**
 
 # Contributions
 Even though I am largely finished with this project feel free to suggest improvements, address issues or fork the repository to experiment with your own datasets.
