@@ -15,6 +15,7 @@ data_dir = '/your/own/path'
 video_dir = '/your/own/path/of/the/video'
 model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model_resnet50.pth')
 
+# All the Hyperparameters
 batch_size = 32
 number_of_workers = 6
 epochs_frozen = 10
@@ -98,7 +99,7 @@ def get_checkpoint():
     print(f"[Info] Βρέθηκε ένα checkpoint: {checkpoints[-1]}" f"Φάση: {data['phase']} | Εποχή: {data['epoch']+1} | Accuracy: {data['best_accuracy']:.4f})")
     return latest, data['best_accuracy']
 
-# Training
+# Here is where the Training starts
 def run_epoch(model, dataloader, dataset_size, criterion, optimizer, phase):
     model.train() if phase == 'train' else model.eval()
     running_loss = 0.0
@@ -190,7 +191,8 @@ def training():
             checkpoints(model, optimizer2, scheduler2, 'unfrozen', epoch, best_accuracy) 
     print(f' [Training] Best Test Accuracy: {best_accuracy:.4f}')
     print(f"[Training] Αποθηκεύτηκε ως '{model_dir}'")
-    
+
+# Here is where the Inference starts
 def inference():
     class_names = classes()
     number_of_classes = len(class_names)
