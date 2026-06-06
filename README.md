@@ -9,5 +9,5 @@ This repository contains the code of the project which is the following file:
 The code itself even though it is one file, it can be split in two parts. The first part being the training of the **ResNet-50 model** on the **CompCars dataset** in order for the model to be able to learn characteristics of specific car brands. The second part is the usage of the **YOLOv8n model** in conjuction with the now **trained ResNet-50 model** on a video with a few distinct and unique techniques. If you want to dive deeper and learn about the inner workings of the code in more detail **[you can click here.](EXPLANATION.md)**
 
 # Useful Links
- - https://www.kaggle.com/datasets/renancostaalencar/compcars Dataset of Pictures
- - https://www.pexels.com/video/dynamic-city-highway-with-arched-bridge-32272314/ The video used
+ - **Dataset:** https://www.kaggle.com/datasets/renancostaalencar/compcars
+ - **The video used:** https://www.pexels.com/video/dynamic-city-highway-with-arched-bridge-32272314/
