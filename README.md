@@ -16,4 +16,4 @@ The code itself even though it is one file, it can be split in two parts. The fi
 <img width="600" height="337" alt="Detection-ezgif com-optimize" src="https://github.com/user-attachments/assets/13c54ce7-6fb1-4466-aa59-ab1402d94ba6" />
 
 # Results
-You can check the results of the video by clicking right here
+If you want to properly see the results of the program you can click **[here](https://drive.google.com/file/d/10hYeSIOSfufaInFkyWj55LAPNFDOUFWv/view?usp=drive_link)**
