@@ -15,8 +15,8 @@ import subprocess, re
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-data_dir = '/home/nakos/Desktop/Neural Networks/Video Classification/data'
-video_dir = '/home/nakos/Desktop/Neural Networks/Video Classification/data/Video/1.mp4'
+data_dir = '/your/own/path'
+video_dir = '/your/own/path/of/the/video'
 model_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model_resnet50.pth')
 
 batch_size = 32
