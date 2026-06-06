@@ -1,7 +1,3 @@
-# https://www.kaggle.com/datasets/renancostaalencar/compcars Dataset
-# https://www.pexels.com/video/dynamic-city-highway-with-arched-bridge-32272314/ Video
-# https://drive.google.com/file/d/10hYeSIOSfufaInFkyWj55LAPNFDOUFWv/view?usp=drive_link Αποτέλεσμα
-
 import os
 import cv2
 import torch 
@@ -34,8 +30,9 @@ max_centroid_distance = 200
 count_line_posiiton = 0.85
 classify_line_position = 0.6
 skip_frames = 2
+block_number = 2
 
-
+# Some picture augmentation to make the model better
 transformation = {
     'train': transforms.Compose([
         transforms.Resize((256, 256)),
@@ -59,13 +56,13 @@ def loading_resnet(num_of_classes: int):
     model.fc = nn.Linear(model.fc.in_features, num_of_classes)    
     return model
 
-# Παγώνει όλα τα layer μείων του fully connected
+# Freezes all the layers other than the fully connecte
 def freeze(model):
     for name, param in model.named_parameters():
         param.requires_grad = ('fc' in name)
         
-# Ξεπαγώνει τα τελευταία 2 blocks
-def unfreeze(model, number_of_blocks = 2):
+# Unfreezes the last two blocks
+def unfreeze(model, number_of_blocks = block_number):
     for param in model.parameters():
         param.requires_grad = False
     for param in model.fc.parameters():
@@ -161,7 +158,7 @@ def training():
             start_epoch_2 = checkpoint['epoch'] + 1
         print(f"[Resume] Φάση: {start_phase} | Epoch: {checkpoint['epoch'] + 1} | " f"Best Accuracy: {best_accuracy:.4f}\n")
         
-    # Training με frozen
+    # Training with the frozen layers
     if start_epoch_1 < epochs_frozen:
         freeze(model)
         print(f"Φάση 1: ({epochs_frozen} epochs, learning rate = {learning_rate_from_frozen})")
@@ -177,7 +174,7 @@ def training():
             if (epoch + 1) % checkpoint_times == 0:
                 checkpoints(model, optimizer1, scheduler1, 'frozen', epoch, best_accuracy)
     
-    # Training με unfrozen τα τελευταία 2 blocks    
+    # Training with the unfrozen layers    
     unfreeze(model, number_of_blocks = 2)
     print(f"Φάση 2: ({epochs_unfrozen} epochs, learning rate = {learning_rate_from_unfrozen})")
     for epoch in range(start_epoch_2, epochs_unfrozen):
@@ -271,7 +268,6 @@ def inference():
                     tracked_cars[best_tid]['box'] = (x1, y1, x2, y2)
                     tracked_cars[best_tid]['last_seen'] = frame_idx
                     
-                    # Αν είναι κοντά στη γραμμή και δεν έχουν κατηγοροιοποιηθεί τότε ξανά εξετάζονται
                     center_y = (y1 + y2) // 2
                     near_line = center_y >= classify_line_position_
                     unresolved = tracked_cars[best_tid]['brand'] == 'Unknown'
@@ -311,7 +307,7 @@ def inference():
             for tid in stale:
                 del tracked_cars[tid]
                 
-        # Μέτρηση του αμαξιού αφού περάσει τη γραμμή        
+        # The car gets registered after it passes the line       
         for tid, info in tracked_cars.items():
             x1, y1, x2, y2 = info['box']
             if not info['counted'] and (y1 + y2) // 2 >= count_line_posiiton_:
