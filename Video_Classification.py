@@ -1,5 +1,3 @@
-# Βαγιόπουλος Κρυωνάς
-# ΑΜ: 2122139
 # https://www.kaggle.com/datasets/renancostaalencar/compcars Dataset
 # https://www.pexels.com/video/dynamic-city-highway-with-arched-bridge-32272314/ Video
 # https://drive.google.com/file/d/10hYeSIOSfufaInFkyWj55LAPNFDOUFWv/view?usp=drive_link Αποτέλεσμα
