@@ -20,3 +20,6 @@ If you want to properly see the results of the program **[you can click here](ht
 
 # Contributions
 Even though I am largely finished with this project feel free to suggest improvements, address issues or fork the repository to experiment with your own datasets.
+
+# Other Projects
+I have built many more projects that revolve around machine learning. If you are interested to see them **[you can click here to check them out](https://github.com/NakosV/University-Machine-Learning-Projects-Catalog)**
