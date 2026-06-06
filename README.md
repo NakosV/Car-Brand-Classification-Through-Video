@@ -12,5 +12,8 @@ The code itself even though it is one file, it can be split in two parts. The fi
  - ***Dataset:*** https://www.kaggle.com/datasets/renancostaalencar/compcars
  - ***The video used:*** https://www.pexels.com/video/dynamic-city-highway-with-arched-bridge-32272314/
 
+# A Portion of the Program Working
+<img width="600" height="337" alt="Detection-ezgif com-optimize" src="https://github.com/user-attachments/assets/13c54ce7-6fb1-4466-aa59-ab1402d94ba6" />
+
 # Results
 You can check the results of the video by clicking right here
