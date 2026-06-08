@@ -9,4 +9,4 @@ In this part of the program, both of the models are utilized. I load **my traine
 Because of how long the training takes, I used checkpoints to insure that if something went wrong at my pc, the progress always gets saved. It isn't completely necessary but highly advised that you do the same when running this program.
 
 # Final Words
-On my machine the program took over 5 hours to run, mainly because of the training with the second part of the training taking the longest. The run time and the success of the program are mainly based on the machine of the user and the data that are fed to the program, so I highly recommend everyone to play around with the variables and the datasets given to the program.
+On my machine the program took over 5 hours to run, mainly because of the training, with the second part of the training taking the longest. The run time and the success of the program are mainly based on the machine of the user and the data that are fed to the program, so I highly recommend everyone to play around with the variables and the datasets given to the program.
