@@ -96,7 +96,7 @@ def get_checkpoint():
         return None, 0.0
     latest = os.path.join(checkpoint_dir, checkpoints[-1])
     data = torch.load(latest, map_location = 'cpu')
-    print(f"[Info] Βρέθηκε ένα checkpoint: {checkpoints[-1]}" f"Φάση: {data['phase']} | Εποχή: {data['epoch']+1} | Accuracy: {data['best_accuracy']:.4f})")
+    print(f"A checkpoint was found: {checkpoints[-1]}" f"Phase: {data['phase']} | Epoch: {data['epoch']+1} | Accuracy: {data['best_accuracy']:.4f})")
     return latest, data['best_accuracy']
 
 # Here is where the Training starts
@@ -157,12 +157,12 @@ def training():
             scheduler2.load_state_dict(checkpoint['scheduler_state'])
             start_epoch_1 = epochs_frozen
             start_epoch_2 = checkpoint['epoch'] + 1
-        print(f"[Resume] Φάση: {start_phase} | Epoch: {checkpoint['epoch'] + 1} | " f"Best Accuracy: {best_accuracy:.4f}\n")
+        print(f"Phase: {start_phase} | Epoch: {checkpoint['epoch'] + 1} | " f"Best Accuracy: {best_accuracy:.4f}\n")
         
     # Training with the frozen layers
     if start_epoch_1 < epochs_frozen:
         freeze(model)
-        print(f"Φάση 1: ({epochs_frozen} epochs, learning rate = {learning_rate_from_frozen})")
+        print(f"Phase 1: ({epochs_frozen} epochs, learning rate = {learning_rate_from_frozen})")
         for epoch in range(start_epoch_1, epochs_frozen):
             print(f'\nEpoch {epoch + 1}/{epochs_frozen}')
             for phase in ['train', 'test']:
@@ -190,13 +190,12 @@ def training():
         if (epoch + 1) % checkpoint_times == 0:
             checkpoints(model, optimizer2, scheduler2, 'unfrozen', epoch, best_accuracy) 
     print(f' [Training] Best Test Accuracy: {best_accuracy:.4f}')
-    print(f"[Training] Αποθηκεύτηκε ως '{model_dir}'")
 
 # Here is where the Inference starts
 def inference():
     class_names = classes()
     number_of_classes = len(class_names)
-    print(f"[ResNet] {number_of_classes} κλάσεις: {class_names[:5]}")
+    print(f"[ResNet] {number_of_classes} Classes: {class_names[:5]}")
     resnet = loading_resnet(number_of_classes)
     resnet.load_state_dict(torch.load(model_dir, map_location = device))
     resnet = resnet.to(device)
@@ -226,7 +225,7 @@ def inference():
     except Exception:
         screen_W, screen_H = 1920, 1080
     print(f"[Display] {screen_W}x{screen_H}")
-    print(f"[Inference] Γραμμή μέτρησης = {count_line_posiiton_} " f"({int(count_line_posiiton * 100)}%")
+    print(f"[Inference] Count Line = {count_line_posiiton_} " f"({int(count_line_posiiton * 100)}%")
     
     cv2.namedWindow('Car Detection & Brand Classification', cv2.WINDOW_NORMAL)
     cv2.setWindowProperty('Car Detection & Brand Classification', cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -337,12 +336,12 @@ def inference():
     cap.release()
     writer.release()
     cv2.destroyAllWindows()
-    print("Καταμέτρηση Αμαξιών")
+    print("Cars")
     total = 0
     for brand, cnt in sorted(brand_counts.items(), key = lambda x: -x[1]):
         print(f" {brand: < 25} {cnt}")
         total = total + cnt
-    print(f" {'Σύνολο': < 25} {total}")
+    print(f" {'Total': < 25} {total}")
         
 if __name__ == '__main__':
     if os.path.exists(model_dir):
