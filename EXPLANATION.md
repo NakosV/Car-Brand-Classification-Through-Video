@@ -1,12 +1,42 @@
-# Detailed Explanation
-##  1. Preprocessing
-As listed before, the **CompCars dataset** was used in this project but due to its huge size and uneven samples of car images per brand some clean up was required before the training. I mainly had to reorganize the files in folders with the actual names of the brands and after that, I deleted any folders that had under 800 pictures because I believe that, anything with that amount of pictures and under, were too small for the model to properly learn.
-## 2. Training
-As mentioned before the pretrained model **ResNet-50** was used for the classification part of this program. I trained it specifically on the cleaned up dataset. The training itself can be broken up to two parts. The first is the training of only the fully connected layer. This is done for **10 epochs** with a learning rate of **0.001**. This step has the purpose of not disturbing the main abilities and knowledge of the model, while learning some basic features of the cars of my dataset. The second part of the training is more intense. In this part the **last two layers** of the model are **unfrozen and trained** on my data with the hopes that the model will learn a lot of the small details of the cars, like particular shapes or small characteristics. This step lasts for **30 epochs** and has a learning rate of **0.0001**.
-## 3. Inference
-In this part of the program, both of the models are utilized. I load **my trained ResNet-50 model** and use it with the **YOLOv8n**. Because of the video that I used, I utilized a unique technique. I drew two lines on the screen. One on the **60% mark** of the screen named ***classify_line_position*** and another on the **85% mark** of the screen named ***count_line_position***. The first is where YOLO starts taking pictures of the car every second frame and the ResNet tries to identify the car brand based on those pictures. The second line is when the cars are actually counted and registered in the system. This way the program has a lot of time to correctly identify a car as it is approching the line and gets closer to the camera. Lastly in order for the program to keep track of a car in between all the frames I used ***Centroid Tracking*** where basically if the centroid of a car moves over a given distance between two frames then it is perceived as a different vehicle.
-## 4. Extras
-Because of how long the training takes, I used checkpoints to insure that if something went wrong at my pc, the progress always gets saved. It isn't completely necessary but highly advised that you do the same when running this program.
+<h1 align="center">Comprehensive Architecture & Logic Guide</h1>
 
-# Final Words
-On my machine the program took over 5 hours to run, mainly because of the training, with the second part of the training taking the longest. The run time and the success of the program are mainly based on the machine of the user and the data that are fed to the program, so I highly recommend everyone to play around with the variables and the datasets given to the program.
+This document provides an in-depth breakdown of the pipeline, detailing how the data was managed, how the deep learning models were trained, and the spatial tracking logic used during video inference.
+
+---
+
+## 1. Dataset Curation & Preprocessing
+
+The **CompCars dataset** serves as the foundation for this project. Due to its massive scale and severe class imbalances, strict data curation protocols were applied prior to training:
+
+*   **Directory Restructuring:** Raw data was reorganized into standard hierarchical folders, mapped directly to specific car brand names to ensure compatibility with PyTorch data loaders.
+*   **Class Filtering:** To prevent overfitting and ensure the model had enough variance to learn robust features, any brand containing fewer than **800 images** was purged from the dataset.
+
+## 2. Two-Phase Transfer Learning
+
+Classification relies on a pre-trained **ResNet-50** architecture. To adapt this model to the specific topological features of car brands without triggering catastrophic forgetting, the training was split into two distinct phases:
+
+> **Phase 1: Classifier Adaptation**
+> *   **Duration:** 10 Epochs | **Learning Rate:** 0.001
+> *   **Mechanics:** The entire convolutional backbone is frozen. Only the newly initialized Fully Connected (FC) layer is trained. This allows the model to map its existing, generalized visual knowledge to the new car brand classes safely.
+
+> **Phase 2: Deep Fine-Tuning**
+> *   **Duration:** 30 Epochs | **Learning Rate:** 0.0001
+> *   **Mechanics:** The last two convolutional blocks of ResNet-50 are unfrozen. The network is trained with a heavily reduced learning rate to learn fine-grained, domain-specific details (e.g., grill shapes, headlight contours, logo placements).
+
+## 3. Inference & Spatial Tracking Logic
+
+The inference stage merges **YOLOv8n** (object detection) with the custom-trained **ResNet-50** (classification). To optimize accuracy on moving video footage, the system employs a dual-line spatial trigger mechanism:
+
+*   **The Identification Zone (`classify_line_position` at 60%):** Once a vehicle crosses this upper threshold, YOLOv8n triggers a crop of the bounding box every two frames. These crops are passed to ResNet-50 for continuous prediction as the car gets larger and clearer approaching the camera.
+*   **The Registration Zone (`count_line_position` at 85%):** The vehicle is officially logged and counted only when it hits this lower threshold. This buffer zone ensures the classifier has ample time and multiple frames to finalize a high-confidence prediction.
+*   **Centroid Tracking:** To maintain vehicle identity between frames, the system calculates the distance between bounding box centroids. If a centroid remains within a defined pixel radius across consecutive frames, it is successfully tracked as the exact same vehicle.
+
+## 4. Fault Tolerance (Checkpointing)
+
+Given the computational intensity of deep fine-tuning, the script incorporates automated checkpointing. Model states, optimizer weights, and learning rate schedulers are periodically saved. This guarantees that training progress is strictly preserved and can be seamlessly resumed in the event of hardware failure or a system crash.
+
+---
+
+> [!NOTE]
+> **Performance & Hardware Dependencies**
+> On local hardware, the complete execution (predominantly Phase 2 of training) took approximately 5 hours. System performance, inference FPS, and overall accuracy scale directly with hardware capabilities and dataset quality. Users are highly encouraged to experiment with the hyperparameters, spatial thresholds, and custom datasets to optimize the pipeline for their specific use cases.
